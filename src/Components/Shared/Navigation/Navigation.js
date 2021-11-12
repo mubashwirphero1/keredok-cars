@@ -23,7 +23,7 @@ const Navigation = () => {
                                 <img src="https://i.ibb.co/6Fw0KQ2/Navigation-logo.png" alt="Navigation-logo" border="0" />
                             </NavLink>
                         </Typography>
-                        <Typography variant="link" component="div" sx={{ flexGrow: 6 }}>
+                        <Typography variant="link" component="div">
                             <Button variant="text" sx={{ color: 'white' }} onClick={() => { historyFunction("/home") }}>Home</Button>
                             <Button variant="text" sx={{ color: 'white' }} onClick={() => { historyFunction("/cars") }}>Cars</Button>
                         </Typography>
