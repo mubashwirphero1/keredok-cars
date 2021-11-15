@@ -1,32 +1,27 @@
-import { Alert, Button, Paper, TextField } from '@mui/material';
+import { Alert, Button, Paper, Rating, TextField, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useState } from 'react';
-import useAuth from '../../../../Hooks/useAuth';
-import Box from '@mui/material/Box';
-import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
 
-const Review = () => {
-    const { user } = useAuth();
-    const { displayName, email } = user;
+const AddProduct = () => {
 
     const [ratings, setRatings] = React.useState(0);
     const [success, setSuccess] = useState(false);
 
-    const [review, setReview] = useState({ name: displayName, email })
+    const [cars, setCars] = useState({})
     const handleOnBlur = e => {
         const field = e.target.name;
         const value = e.target.value;
-        const newReviewData = { ...review, ratings }
+        const newReviewData = { ...cars, ratings }
         newReviewData[field] = value;
-        setReview(newReviewData)
+        setCars(newReviewData)
     }
     const handleOnSubmit = e => {
-        fetch("https://ancient-springs-28186.herokuapp.com/reviews", {
+        fetch("https://ancient-springs-28186.herokuapp.com/cars/add", {
             method: "POST",
             headers: {
                 'content-type': "application/json"
             },
-            body: JSON.stringify(review)
+            body: JSON.stringify(cars)
         })
         setSuccess(true);
     }
@@ -34,29 +29,23 @@ const Review = () => {
         <div>
             <form onSubmit={handleOnSubmit}>
                 <Paper sx={{ p: 5 }}>
-                    <h1 style={{ textAlign: "center" }}>Review to our website</h1>
+                    <h1 style={{ textAlign: "center" }}>Add a product</h1>
                     <TextField
                         sx={{ width: "75%", m: 2 }}
+                        onBlur={handleOnBlur}
                         id="standard-basic"
-                        label="Your Name"
-                        defaultValue={displayName}
-                        InputProps={{
-                            readOnly: true,
-                        }}
+                        label="Car Name"
                         name="name"
                         variant="standard" />
                     <TextField
                         sx={{ width: "75%", m: 2 }}
+                        onBlur={handleOnBlur}
                         id="standard-basic"
-                        label="Your Email"
-                        defaultValue={email}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        name="email"
+                        label="Price"
+                        name="price"
                         variant="standard" />
                     <Box>
-                        <Typography>Your Ratings</Typography>
+                        <Typography>Product Ratings</Typography>
                         <Rating
                             name="simple-controlled"
                             value={ratings}
@@ -68,17 +57,25 @@ const Review = () => {
                     <TextField
                         sx={{ width: "75%", m: 2 }}
                         id="standard-basic"
-                        label="Your Description"
+                        label="Product Image Link"
+                        multiline
+                        name="img"
+                        variant="standard"
+                        onBlur={handleOnBlur} />
+                    <TextField
+                        sx={{ width: "75%", m: 2 }}
+                        id="standard-basic"
+                        label="Product Description"
                         multiline
                         name="description"
                         variant="standard"
                         onBlur={handleOnBlur} />
-                    <Button variant="contained" sx={{ width: "75%" }} type="submit">Submit</Button>
-                    {success && <Alert severity="success">Review added successfully</Alert>}
+                    <Button variant="contained" sx={{ width: "75%" }} type="submit">Add Product</Button>
+                    {success && <Alert severity="success">Product added successfully</Alert>}
                 </Paper>
             </form>
         </div>
     );
 };
 
-export default Review;
+export default AddProduct;

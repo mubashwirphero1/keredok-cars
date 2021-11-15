@@ -14,15 +14,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useAuth from '../../../Hooks/useAuth';
-import { CropSquare, Feedback, Home, Logout } from '@mui/icons-material';
+import { AdminPanelSettings, CropSquare, DeleteForever, Feedback, Home, ListAlt, Logout, ProductionQuantityLimits } from '@mui/icons-material';
 import { NavLink, useRouteMatch, Switch, Route } from 'react-router-dom';
 import DashboardHome from './DashboardHome/DashboardHome';
 import Review from './Review/Review';
+import AdminOnly from '../../../PrivateRoute/AdminOnly/AdminOnly';
+import Admin from './Admin/Admin';
+import Orders from './Orders/Orders';
+import AddProduct from './AddProduct/AddProduct';
+import DeleteProducts from './DeleteProducts/DeleteProducts';
 
 const drawerWidth = 240;
 
 function Dashboard(props) {
-    const { user, logoutUser } = useAuth();
+    const { user, logoutUser, admin } = useAuth();
     let { path, url } = useRouteMatch();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -60,7 +65,43 @@ function Dashboard(props) {
                         <ListItemText >Review</ListItemText>
                     </ListItem>
                 </NavLink>
-                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                {
+                    admin && <>
+                        <NavLink style={{ textDecoration: "none", color: "black" }} to={`${url}/makeAdmin`}>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <AdminPanelSettings />
+                                </ListItemIcon>
+                                <ListItemText >Make admin</ListItemText>
+                            </ListItem>
+                        </NavLink>
+                        <NavLink style={{ textDecoration: "none", color: "black" }} to={`${url}/mangeOrder`}>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <ListAlt />
+                                </ListItemIcon>
+                                <ListItemText >All Orders</ListItemText>
+                            </ListItem>
+                        </NavLink>
+                        <NavLink style={{ textDecoration: "none", color: "black" }} to={`${url}/addProducts`}>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <ProductionQuantityLimits />
+                                </ListItemIcon>
+                                <ListItemText >Add Products</ListItemText>
+                            </ListItem>
+                        </NavLink>
+                        <NavLink style={{ textDecoration: "none", color: "black" }} to={`${url}/deleteProducts`}>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <DeleteForever />
+                                </ListItemIcon>
+                                <ListItemText >Delete Products</ListItemText>
+                            </ListItem>
+                        </NavLink>
+                    </>
+                }
+                <Divider />
                 <ListItem button onClick={logoutUser}>
                     <ListItemIcon>
                         <Logout />
@@ -142,6 +183,18 @@ function Dashboard(props) {
                     <Route path={`${path}/review`}>
                         <Review />
                     </Route>
+                    <AdminOnly path={`${path}/makeAdmin`}>
+                        <Admin />
+                    </AdminOnly>
+                    <AdminOnly path={`${path}/mangeOrder`}>
+                        <Orders />
+                    </AdminOnly>
+                    <AdminOnly path={`${path}/addProducts`}>
+                        <AddProduct />
+                    </AdminOnly>
+                    <AdminOnly path={`${path}/deleteProducts`}>
+                        <DeleteProducts />
+                    </AdminOnly>
                 </Switch>
             </Box>
         </Box>

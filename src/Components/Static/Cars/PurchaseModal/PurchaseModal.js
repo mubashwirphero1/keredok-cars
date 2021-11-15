@@ -21,7 +21,7 @@ const PurchaseModal = ({ open, setOpen, name }) => {
     }
 
     const handleOnSubmit = (e) => {
-        fetch('http://localhost:5000/orders', {
+        fetch('https://ancient-springs-28186.herokuapp.com/orders', {
             method: "POST",
             headers: {
                 "content-type": "application/json"

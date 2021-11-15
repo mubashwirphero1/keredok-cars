@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,20 +6,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import useAuth from '../../../../Hooks/useAuth';
 
-const DashboardHome = () => {
-    const { user } = useAuth();
-
-    const [orders, setOrders] = React.useState([]);
-    React.useEffect(() => {
-        fetch(`https://ancient-springs-28186.herokuapp.com/orders/${user.email}`)
+const Orders = () => {
+    const [orders, setOrders] = useState([]);
+    useEffect(() => {
+        fetch("https://ancient-springs-28186.herokuapp.com/orders/manage")
             .then(res => res.json())
             .then(data => setOrders(data))
     }, [])
     return (
         <div>
-            <h1>Your order history</h1>
+            <h1>All Orders</h1>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -53,4 +50,4 @@ const DashboardHome = () => {
     );
 };
 
-export default DashboardHome;
+export default Orders;

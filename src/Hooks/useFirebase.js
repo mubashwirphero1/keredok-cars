@@ -10,6 +10,8 @@ const useFirebase = () => {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [authError, setAuthError] = useState('');
+    const [admin, setAdmin] = useState(false);
+    console.log(admin);
 
     const auth = getAuth();
 
@@ -65,7 +67,7 @@ const useFirebase = () => {
 
     const saveUser = (email, displayName) => {
         const user = { email, displayName }
-        fetch("http://localhost:5000/user", {
+        fetch("https://ancient-springs-28186.herokuapp.com/user", {
             method: "POST",
             headers: {
                 'content-type': "application/json"
@@ -87,17 +89,31 @@ const useFirebase = () => {
                 // ...
             } else {
                 // User is signed out
-                setUser({})
+                setUser()
+                setIsLoading(false)
             }
         });
     }, [])
+    useEffect(() => {
+        fetch(`https://ancient-springs-28186.herokuapp.com/user/${user?.email}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.role == 'admin') {
+                    setAdmin(true);
+                }
+                else {
+                    setAdmin(false)
+                }
+            })
+    }, [user?.email])
     return {
         user,
         isLoading,
         authError,
         registerUser,
         loginUser,
-        logoutUser
+        logoutUser,
+        admin
     }
 };
 
